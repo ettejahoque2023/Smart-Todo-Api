@@ -45,12 +45,18 @@ export const updateTask = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    task.title = req.body.title || task.title;
-    task.description = req.body.description || task.description;
-    task.completed =
-      req.body.completed !== undefined
-        ? req.body.completed
-        : task.completed;
+    // ✅ SAFE UPDATES
+    if (req.body.title !== undefined) {
+      task.title = req.body.title;
+    }
+
+    if (req.body.description !== undefined) {
+      task.description = req.body.description;
+    }
+
+    if (req.body.completed !== undefined) {
+      task.completed = req.body.completed;
+    }
 
     const updatedTask = await task.save();
     res.json(updatedTask);
